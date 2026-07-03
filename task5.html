@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShopEase - E-Commerce</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+scroll-behavior:smooth;
+}
+
+body{
+background:#f5f5f5;
+color:#333;
+}
+
+header{
+background:#222;
+color:#fff;
+padding:15px 8%;
+display:flex;
+justify-content:space-between;
+align-items:center;
+position:sticky;
+top:0;
+z-index:1000;
+}
+
+.logo{
+font-size:28px;
+font-weight:bold;
+}
+
+nav a{
+color:white;
+text-decoration:none;
+margin-left:20px;
+font-weight:bold;
+}
+
+nav a:hover{
+color:orange;
+}
+
+.hero{
+height:80vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+text-align:center;
+background:linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,.6)),
+url("https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=1200");
+background-size:cover;
+background-position:center;
+color:white;
+}
+
+.hero h1{
+font-size:55px;
+margin-bottom:20px;
+}
+
+.hero p{
+font-size:22px;
+margin-bottom:25px;
+}
+
+.hero button{
+padding:15px 30px;
+background:orange;
+border:none;
+color:white;
+font-size:18px;
+cursor:pointer;
+border-radius:6px;
+}
+
+.hero button:hover{
+background:#ff6600;
+}
+
+.section{
+padding:60px 8%;
+}
+
+.section h2{
+text-align:center;
+margin-bottom:40px;
+}
+
+#search{
+width:100%;
+padding:12px;
+margin-bottom:30px;
+font-size:16px;
+}
+
+.products{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:25px;
+}
+
+.card{
+background:white;
+border-radius:10px;
+overflow:hidden;
+box-shadow:0 5px 15px rgba(0,0,0,.15);
+transition:.3s;
+}
+
+.card:hover{
+transform:translateY(-8px);
+}
+
+.card img{
+width:100%;
+height:220px;
+object-fit:cover;
+}
+
+.card-body{
+padding:20px;
+}
+
+.card-body h3{
+margin-bottom:10px;
+}
+
+.price{
+font-size:22px;
+color:green;
+margin:10px 0;
+}
+
+.card button{
+width:100%;
+padding:12px;
+background:#222;
+color:white;
+border:none;
+cursor:pointer;
+border-radius:5px;
+}
+
+.card button:hover{
+background:orange;
+}
+
+#cart{
+background:white;
+padding:20px;
+border-radius:10px;
+margin-top:40px;
+box-shadow:0 5px 10px rgba(0,0,0,.15);
+}
+
+.cart-item{
+display:flex;
+justify-content:space-between;
+margin:12px 0;
+}
+
+.total{
+font-size:22px;
+font-weight:bold;
+margin-top:20px;
+}
+
+.contact{
+background:white;
+padding:30px;
+border-radius:10px;
+margin-top:40px;
+}
+
+.contact input,
+.contact textarea{
+width:100%;
+padding:12px;
+margin:10px 0;
+}
+
+.contact button{
+padding:12px 25px;
+background:green;
+color:white;
+border:none;
+cursor:pointer;
+}
+
+footer{
+margin-top:50px;
+background:#222;
+color:white;
+text-align:center;
+padding:20px;
+}
+
+@media(max-width:768px){
+
+.hero h1{
+font-size:35px;
+}
+
+nav{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+}
+
+nav a{
+margin:10px;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<div class="logo">ShopEase</div>
+
+<nav>
+
+<a href="#">Home</a>
+
+<a href="#products">Products</a>
+
+<a href="#cart">Cart (<span id="count">0</span>)</a>
+
+<a href="#contact">Contact</a>
+
+</nav>
+
+</header>
+
+<section class="hero">
+
+<h1>Welcome To ShopEase</h1>
+
+<p>Best Deals On Electronics</p>
+
+<button onclick="document.getElementById('products').scrollIntoView()">
+Shop Now
+</button>
+
+</section>
+
+<section class="section" id="products">
+
+<h2>Products</h2>
+
+<input
+type="text"
+id="search"
+placeholder="Search products...">
+
+<div class="products" id="productList"></div>
+
+</section>
+
+<section class="section">
+
+<div id="cart">
+
+<h2>Shopping Cart</h2>
+
+<div id="cartItems"></div>
+
+<p class="total">
+Total ₹<span id="total">0</span>
+</p>
+
+</div>
+
+</section>
+
+<section class="section" id="contact">
+
+<div class="contact">
+
+<h2>Contact Us</h2>
+
+<input type="text" placeholder="Your Name">
+
+<input type="email" placeholder="Email">
+
+<textarea rows="5" placeholder="Message"></textarea>
+
+<button>Send</button>
+
+</div>
+
+</section>
+
+<footer>
+
+© 2026 ShopEase | HTML CSS JavaScript Project
+
+</footer>
+
+<script>
+const products = [
+
+{
+id:1,
+name:"Laptop",
+price:60000,
+image:"https://picsum.photos/300?1"
+},
+
+{
+id:2,
+name:"Smartphone",
+price:25000,
+image:"https://picsum.photos/300?2"
+},
+
+{
+id:3,
+name:"Headphones",
+price:3500,
+image:"https://picsum.photos/300?3"
+},
+
+{
+id:4,
+name:"Smart Watch",
+price:5500,
+image:"https://picsum.photos/300?4"
+},
+
+{
+id:5,
+name:"Camera",
+price:45000,
+image:"https://picsum.photos/300?5"
+},
+
+{
+id:6,
+name:"Shoes",
+price:3000,
+image:"https://picsum.photos/300?6"
+},
+
+{
+id:7,
+name:"Gaming Mouse",
+price:1800,
+image:"https://picsum.photos/300?7"
+},
+
+{
+id:8,
+name:"Keyboard",
+price:2200,
+image:"https://picsum.photos/300?8"
+}
+
+];
+
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+const productList = document.getElementById("productList");
+const cartItems = document.getElementById("cartItems");
+const total = document.getElementById("total");
+const count = document.getElementById("count");
+
+function displayProducts(data){
+
+productList.innerHTML="";
+
+data.forEach(product=>{
+
+productList.innerHTML +=`
+
+<div class="card">
+
+<img src="${product.image}" loading="lazy">
+
+<div class="card-body">
+
+<h3>${product.name}</h3>
+
+<p class="price">₹${product.price}</p>
+
+<button onclick="addToCart(${product.id})">
+
+Add To Cart
+
+</button>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+}
+
+displayProducts(products);
+
+function addToCart(id){
+
+const product=products.find(p=>p.id===id);
+
+cart.push(product);
+
+localStorage.setItem("cart",JSON.stringify(cart));
+
+updateCart();
+
+alert(product.name+" Added To Cart");
+
+}
+
+function updateCart(){
+
+cartItems.innerHTML="";
+
+let grandTotal=0;
+
+cart.forEach((item,index)=>{
+
+grandTotal += item.price;
+
+cartItems.innerHTML +=`
+
+<div class="cart-item">
+
+<span>${item.name}</span>
+
+<span>
+
+₹${item.price}
+
+<button onclick="removeItem(${index})">
+
+❌
+
+</button>
+
+</span>
+
+</div>
+
+`;
+
+});
+
+total.innerText=grandTotal;
+
+count.innerText=cart.length;
+
+}
+
+function removeItem(index){
+
+cart.splice(index,1);
+
+localStorage.setItem("cart",JSON.stringify(cart));
+
+updateCart();
+
+}
+
+updateCart();
+
+document.getElementById("search").addEventListener("keyup",function(){
+
+let value=this.value.toLowerCase();
+
+let filtered=products.filter(product=>
+
+product.name.toLowerCase().includes(value)
+
+);
+
+displayProducts(filtered);
+
+});
+// Contact Form
+const contactBtn = document.querySelector(".contact button");
+
+contactBtn.addEventListener("click", function(){
+
+const name = document.querySelector(".contact input[type='text']").value;
+const email = document.querySelector(".contact input[type='email']").value;
+const message = document.querySelector(".contact textarea").value;
+
+if(name=="" || email=="" || message==""){
+
+alert("Please fill all fields!");
+
+return;
+
+}
+
+alert("Message Sent Successfully!");
+
+document.querySelector(".contact input[type='text']").value="";
+document.querySelector(".contact input[type='email']").value="";
+document.querySelector(".contact textarea").value="";
+
+});
+
+// Dark Mode Button
+
+const darkBtn=document.createElement("button");
+
+darkBtn.innerHTML="🌙 Dark Mode";
+
+darkBtn.style.position="fixed";
+darkBtn.style.bottom="20px";
+darkBtn.style.left="20px";
+darkBtn.style.padding="12px";
+darkBtn.style.border="none";
+darkBtn.style.background="black";
+darkBtn.style.color="white";
+darkBtn.style.cursor="pointer";
+darkBtn.style.borderRadius="8px";
+
+document.body.appendChild(darkBtn);
+
+let dark=false;
+
+darkBtn.onclick=function(){
+
+dark=!dark;
+
+if(dark){
+
+document.body.style.background="#111";
+document.body.style.color="white";
+
+}else{
+
+document.body.style.background="#f5f5f5";
+document.body.style.color="#333";
+
+}
+
+};
+
+// Scroll To Top
+
+const topBtn=document.createElement("button");
+
+topBtn.innerHTML="⬆";
+
+topBtn.style.position="fixed";
+topBtn.style.bottom="20px";
+topBtn.style.right="20px";
+topBtn.style.padding="15px";
+topBtn.style.border="none";
+topBtn.style.borderRadius="50%";
+topBtn.style.background="orange";
+topBtn.style.color="white";
+topBtn.style.cursor="pointer";
+
+document.body.appendChild(topBtn);
+
+topBtn.onclick=function(){
+
+window.scrollTo({
+
+top:0,
+
+behavior:"smooth"
+
+});
+
+};
+
+// Welcome Message
+
+setTimeout(()=>{
+
+alert("Welcome to ShopEase!");
+
+},800);
+// ===== Wishlist =====
+let wishlist = [];
+
+function addToWishlist(id){
+
+const product = products.find(p => p.id === id);
+
+wishlist.push(product);
+
+alert(product.name + " added to Wishlist ❤️");
+
+}
+
+// ===== Product Rating =====
+
+document.querySelectorAll(".card").forEach(card=>{
+
+const rating=document.createElement("p");
+
+rating.innerHTML="⭐⭐⭐⭐☆";
+
+rating.style.color="gold";
+
+card.querySelector(".card-body").appendChild(rating);
+
+});
+
+// ===== Invoice =====
+
+function downloadInvoice(){
+
+let text="SHOP EASE INVOICE\n\n";
+
+cart.forEach(item=>{
+
+text+=item.name+" - ₹"+item.price+"\n";
+
+});
+
+text+="\n----------------------\n";
+
+text+="TOTAL : ₹"+total.innerText;
+
+const blob=new Blob([text],{type:"text/plain"});
+
+const a=document.createElement("a");
+
+a.href=URL.createObjectURL(blob);
+
+a.download="invoice.txt";
+
+a.click();
+
+}
+
+// Invoice Button
+
+const invoiceBtn=document.createElement("button");
+
+invoiceBtn.innerHTML="Download Invoice";
+
+invoiceBtn.style.marginTop="20px";
+
+invoiceBtn.style.padding="12px";
+
+invoiceBtn.style.background="green";
+
+invoiceBtn.style.color="white";
+
+invoiceBtn.style.border="none";
+
+invoiceBtn.style.cursor="pointer";
+
+document.getElementById("cart").appendChild(invoiceBtn);
+
+invoiceBtn.onclick=downloadInvoice;
+
+// ===== Footer Year =====
+
+document.querySelector("footer").innerHTML =
+"© " + new Date().getFullYear() + " ShopEase | HTML CSS JavaScript Project";
+
+// ===== Console Message =====
+
+console.log("ShopEase Loaded Successfully");
+// ===== Loading Spinner =====
+
+const spinner = document.createElement("div");
+
+spinner.innerHTML = "Loading...";
+
+spinner.style.position = "fixed";
+spinner.style.top = "50%";
+spinner.style.left = "50%";
+spinner.style.transform = "translate(-50%,-50%)";
+spinner.style.background = "#222";
+spinner.style.color = "white";
+spinner.style.padding = "20px";
+spinner.style.borderRadius = "10px";
+
+document.body.appendChild(spinner);
+
+setTimeout(() => {
+
+spinner.remove();
+
+},1500);
+
+// ===== Toast Notification =====
+
+function showToast(message){
+
+const toast=document.createElement("div");
+
+toast.innerHTML=message;
+
+toast.style.position="fixed";
+toast.style.top="20px";
+toast.style.right="20px";
+toast.style.background="green";
+toast.style.color="white";
+toast.style.padding="15px";
+toast.style.borderRadius="8px";
+toast.style.zIndex="9999";
+
+document.body.appendChild(toast);
+
+setTimeout(()=>{
+
+toast.remove();
+
+},2500);
+
+}
+
+// Replace addToCart alert
+
+const oldAddToCart=addToCart;
+
+addToCart=function(id){
+
+oldAddToCart(id);
+
+showToast("Item added to cart");
+
+}
+
+// ===== Fake Checkout Button =====
+
+const checkoutBtn=document.createElement("button");
+
+checkoutBtn.innerHTML="Proceed To Checkout";
+
+checkoutBtn.style.marginTop="15px";
+checkoutBtn.style.marginLeft="10px";
+checkoutBtn.style.padding="12px";
+checkoutBtn.style.background="blue";
+checkoutBtn.style.color="white";
+checkoutBtn.style.border="none";
+checkoutBtn.style.cursor="pointer";
+
+document.getElementById("cart").appendChild(checkoutBtn);
+
+checkoutBtn.onclick=function(){
+
+if(cart.length==0){
+
+alert("Your cart is empty!");
+
+return;
+
+}
+
+alert("Order Placed Successfully!\nThank you for shopping with ShopEase.");
+
+cart=[];
+
+localStorage.removeItem("cart");
+
+updateCart();
+
+};
+
+// ===== Keyboard Shortcut =====
+
+document.addEventListener("keydown",function(e){
+
+if(e.key==="F2"){
+
+alert("Welcome to ShopEase!");
+
+}
+
+});
+
+// ===== Page Loaded =====
+
+window.onload=function(){
+
+updateCart();
+
+console.log("Website Ready");
+
+};
+// ===== Product Counter =====
+
+const productTitle = document.querySelector("#products h2");
+
+if(productTitle){
+    productTitle.innerHTML = "Products (" + products.length + ")";
+}
+
+// ===== Double-click Logo to Go Home =====
+
+const logo = document.querySelector(".logo");
+
+logo.addEventListener("dblclick", function () {
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+});
+
+// ===== Thank You Message =====
+
+console.log("Thank you for using ShopEase!");
+</script>
+</body>
+</html>
