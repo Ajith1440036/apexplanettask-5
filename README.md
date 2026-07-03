@@ -1,1 +1,1 @@
-# apexplanettask-5
+This project is a responsive e-commerce website developed using HTML, CSS, and JavaScript. It features a modern homepage, dynamic product listing, product search, shopping cart functionality with Local Storage, a contact form, dark mode, and invoice generation. The project demonstrates core frontend development skills, DOM manipulation, event handling, responsive web design, and client-side data storage using JavaScript.
